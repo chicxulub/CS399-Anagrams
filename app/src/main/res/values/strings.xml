@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Nagaram</string>
+
+    <string name="hello_world">Welcome!</string>
+    <string name="screen2">You did it!</string>
+    <string name="action_about">About</string>
+    <string name="title_activity_about_nagaram">About Nagaram</string>
+    <string name="action_settings">Settings</string>
+</resources>
