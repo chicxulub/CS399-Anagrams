@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="chicxulub.nagaram.SplashActivity" />
         </activity>
+        <activity
+            android:name="chicxulub.nagaram.GameActivity"
+            android:label="@string/title_activity_game"
+            android:parentActivityName="chicxulub.nagaram.ChooseDifficulty" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="chicxulub.nagaram.ChooseDifficulty" />
+        </activity>
     </application>
 
 </manifest>
