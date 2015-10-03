@@ -587,9 +587,10 @@ int string action_about 0x7f060012
 int string action_settings 0x7f060013
 int string app_name 0x7f060014
 int string hello_world 0x7f060015
-int string screen2 0x7f060016
+int string ram 0x7f060016
+int string screen2 0x7f060017
 int string status_bar_notification_info_overflow 0x7f060011
-int string title_activity_about_nagaram 0x7f060017
+int string title_activity_about_nagaram 0x7f060018
 int style AlertDialog_AppCompat 0x7f08007a
 int style AlertDialog_AppCompat_Light 0x7f08007b
 int style Animation_AppCompat_Dialog 0x7f08007c

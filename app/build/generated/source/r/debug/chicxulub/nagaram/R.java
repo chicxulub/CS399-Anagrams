@@ -1738,9 +1738,10 @@ containing a value of this type.
         public static final int action_settings=0x7f060013;
         public static final int app_name=0x7f060014;
         public static final int hello_world=0x7f060015;
-        public static final int screen2=0x7f060016;
+        public static final int ram=0x7f060016;
+        public static final int screen2=0x7f060017;
         public static final int status_bar_notification_info_overflow=0x7f060011;
-        public static final int title_activity_about_nagaram=0x7f060017;
+        public static final int title_activity_about_nagaram=0x7f060018;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f08007a;
