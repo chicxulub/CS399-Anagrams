@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:1-29:12
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:1-39:12
 	xmlns:android
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:11-69
 	package
@@ -14,7 +14,7 @@ ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidMani
 		INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml
 application
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:5:5-27:19
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:5:5-37:19
 MERGED from [com.android.support:appcompat-v7:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:22:5-20
 	android:label
@@ -24,7 +24,7 @@ MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Emily\AndroidStudio
 	android:icon
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:7:9-43
 	android:theme
-		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:9:9-40
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:9:9-59
 activity#chicxulub.nagaram.SplashActivity
 ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:10:9-18:20
 	android:label
@@ -42,19 +42,31 @@ ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidMani
 	android:name
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:16:27-74
 activity#chicxulub.nagaram.AboutNagaram
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:19:9-26:20
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:19:9-27:20
 	android:label
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:21:13-65
+	android:theme
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:23:13-51
 	android:parentActivityName
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:22:13-57
 	android:name
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:20:13-41
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:23:13-25:68
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:24:13-26:68
 	android:name
-		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:24:17-63
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:25:17-63
 	android:value
-		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:25:17-65
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:26:17-65
+activity#chicxulub.nagaram.ChooseDifficulty
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:28:9-36:20
+	android:label
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:30:13-69
+	android:theme
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:32:13-51
+	android:parentActivityName
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:31:13-57
+	android:name
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:29:13-45
 uses-sdk
 INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:20:5-43

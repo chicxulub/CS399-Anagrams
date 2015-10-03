@@ -227,6 +227,7 @@
     <!-- From: file:/C:/Users/Emily/AndroidStudioProjects/Nagaram/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_activity_about_nagaram">About Nagaram</string>
+    <string name="title_activity_choose_difficulty">Choose a Difficulty</string>
     <!-- From: file:/C:/Users/Emily/AndroidStudioProjects/Nagaram/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
@@ -235,7 +236,7 @@
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
     <!-- From: file:/C:/Users/Emily/AndroidStudioProjects/Nagaram/app/src/main/res/values/styles.xml -->
     <eat-comment/>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
     <!-- From: file:/C:/Users/Emily/AndroidStudioProjects/Nagaram/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
