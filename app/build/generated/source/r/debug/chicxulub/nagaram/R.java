@@ -1593,8 +1593,6 @@ containing a value of this type.
         public static final int alertTitle=0x7f0c002e;
         public static final int always=0x7f0c001b;
         public static final int beginning=0x7f0c0018;
-        public static final int button=0x7f0c0053;
-        public static final int button2=0x7f0c0054;
         public static final int buttonPanel=0x7f0c0034;
         public static final int cancel_action=0x7f0c0059;
         public static final int checkbox=0x7f0c0036;
@@ -1636,6 +1634,7 @@ containing a value of this type.
         public static final int play=0x7f0c0056;
         public static final int progress_circular=0x7f0c0005;
         public static final int progress_horizontal=0x7f0c0006;
+        public static final int quit=0x7f0c0054;
         public static final int radio=0x7f0c0038;
         public static final int screen=0x7f0c0014;
         public static final int scrollView=0x7f0c0030;
@@ -1659,6 +1658,7 @@ containing a value of this type.
         public static final int src_in=0x7f0c0016;
         public static final int src_over=0x7f0c0017;
         public static final int status_bar_latest_event_content=0x7f0c005a;
+        public static final int submit=0x7f0c0053;
         public static final int submit_area=0x7f0c0049;
         public static final int tabMode=0x7f0c000b;
         public static final int text=0x7f0c0062;
