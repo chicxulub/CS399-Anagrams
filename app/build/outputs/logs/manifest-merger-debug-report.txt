@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:1-55:12
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:1-59:12
 	xmlns:android
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:2:11-69
 	package
@@ -14,7 +14,7 @@ ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidMani
 		INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml
 application
-ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:5:5-53:19
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:5:5-57:19
 MERGED from [com.android.support:appcompat-v7:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\AndroidManifest.xml:22:5-20
 	android:label
@@ -83,6 +83,12 @@ ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidMani
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:48:13-55
 	android:name
 		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:46:13-44
+activity#chicxulub.nagaram.ScoreboardActivity
+ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:53:9-56:20
+	android:label
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:55:13-62
+	android:name
+		ADDED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml:54:13-47
 uses-sdk
 INJECTED from C:\Users\Emily\AndroidStudioProjects\Nagaram\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.0.1] C:\Users\Emily\AndroidStudioProjects\Nagaram\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:20:5-43

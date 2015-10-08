@@ -56,6 +56,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="chicxulub.nagaram.GameActivity" />
         </activity>
+        <activity
+            android:name="chicxulub.nagaram.ScoreboardActivity"
+            android:label="@string/title_activity_scoreboard" >
+        </activity>
     </application>
 
 </manifest>
