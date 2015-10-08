@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="chicxulub.nagaram.ChooseDifficulty" />
         </activity>
+        <activity
+            android:name="chicxulub.nagaram.FakeWinActivity"
+            android:label="@string/title_activity_fake_win"
+            android:parentActivityName="chicxulub.nagaram.GameActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="chicxulub.nagaram.GameActivity" />
+        </activity>
     </application>
 
 </manifest>

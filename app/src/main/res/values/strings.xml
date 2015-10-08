@@ -9,4 +9,6 @@
     <string name="ram">Remmy</string>
     <string name="title_activity_choose_difficulty">Choose a Difficulty</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_fake_win">FakeWinActivity</string>
+    <string name="title_activity_scoreboard">ScoreboardActivity</string>
 </resources>

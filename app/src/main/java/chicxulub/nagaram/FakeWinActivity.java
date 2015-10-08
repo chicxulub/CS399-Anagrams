@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -15,25 +14,24 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
-    private String TAG = getClass().getSimpleName();
+public class FakeWinActivity extends AppCompatActivity implements View.OnClickListener {
     private final Activity dis = this;
-    private Intent mHomeIntent;
-    private Intent mTempSubmitIntent;
+    private Intent mMainIntent;
+    private Intent mScoreIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-        View view = findViewById(R.id.view);
-        setupUI(view);
+        setContentView(R.layout.activity_fake_win);
+        setupUI(findViewById(R.id.root));
 
-        this.mHomeIntent = new Intent(this, SplashActivity.class);
-        Button quit = (Button)findViewById(R.id.quit);
-        quit.setOnClickListener(this);
+        this.mMainIntent = new Intent(this, SplashActivity.class);
+        this.mScoreIntent = new Intent(this, ScoreboardActivity.class);
 
-        this.mTempSubmitIntent = new Intent(this, FakeWinActivity.class);
-        Button submit = (Button)findViewById(R.id.submit);
-        submit.setOnClickListener(this);
+        Button main = (Button)findViewById(R.id.main);
+        Button scores = (Button)findViewById(R.id.scores);
+
+        main.setOnClickListener(this);
+        scores.setOnClickListener(this);
     }
 
     // http://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
@@ -62,13 +60,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.quit:
-                startActivity(this.mHomeIntent);
+        switch(view.getId()) {
+            case R.id.main:
+                startActivity(this.mMainIntent);
                 break;
-            case R.id.submit:
-                Log.d(TAG, "submitting...");
-                startActivity(this.mTempSubmitIntent);
+            case R.id.scores:
+                startActivity(this.mScoreIntent);
                 break;
         }
     }
