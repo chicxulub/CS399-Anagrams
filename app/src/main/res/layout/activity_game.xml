@@ -20,18 +20,18 @@
             android:text="anagram"
             android:textSize="24sp"
             android:gravity="center"
-            android:id="@+id/textView" />
+            android:id="@+id/chosenWord" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText"
             android:layout_centerInParent="true"
-            android:layout_below="@id/textView"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_alignRight="@+id/textView"
-            android:layout_alignEnd="@+id/textView" />
+            android:layout_below="@+id/chosenWord"
+            android:layout_alignLeft="@+id/chosenWord"
+            android:layout_alignStart="@+id/chosenWord"
+            android:layout_alignRight="@+id/chosenWord"
+            android:layout_alignEnd="@+id/chosenWord" />
 
         <Button
             style="?android:attr/buttonStyleSmall"

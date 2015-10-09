@@ -5,4 +5,4 @@
         android:id="@+id/action_about" android:title="@string/action_about"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
-<!-- From: file:/C:/Users/Emily/AndroidStudioProjects/Nagaram/app/src/main/res/menu/menu_splash.xml -->
+<!-- From: file:/home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/res/menu/menu_splash.xml -->
