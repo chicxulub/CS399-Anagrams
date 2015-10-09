@@ -3,10 +3,12 @@ package chicxulub.nagaram;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -22,41 +24,72 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = getClass().getSimpleName();
     private final Activity dis = this;
     private Intent mHomeIntent;
+    private String word, solution;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // fileLength = #pairs/file - 1
+        int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         TextView text = (TextView)findViewById(R.id.chosenWord);
-        switch (getIntent().getStringExtra("difficulty")) {
+        Random rand = new Random();
+        int wordIndex = rand.nextInt(2) + 1;
+        int pairIndex;
+        switch (getIntent().getStringExtra("level")) {
             case "easy":
                 try {
-                    text.setText(getWord("easy"));
+                    pairIndex = rand.nextInt(easyLength) + 1;
+                    word = getWord("easy", pairIndex, wordIndex);
+                    if (wordIndex == 2)
+                        solution = getWord("easy", pairIndex, 1);
+                    else
+                        solution = getWord("easy", pairIndex, 2);
                 } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "intermediate":
                 try {
-                    text.setText(getWord("intermediate"));
+                    pairIndex = rand.nextInt(intermediateLength) + 1;
+                    word = getWord("intermediate", pairIndex, wordIndex);
+                    if (wordIndex == 2)
+                        solution = getWord("intermediate", pairIndex, 1);
+                    else
+                        solution = getWord("intermediate", pairIndex, 2);
                 } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case "hard":
                 try {
-                    text.setText(getWord("hard"));
+                    pairIndex = rand.nextInt(hardLength) + 1;
+                    word = getWord("hard", pairIndex, wordIndex);
+                    if (wordIndex == 2)
+                        solution = getWord("hard", pairIndex, 1);
+                    else
+                        solution = getWord("hard", pairIndex, 2);
                 } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
         }
+        text.setText(word);
         View view = findViewById(R.id.view);
         setupUI(view);
 
@@ -65,28 +98,50 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         quit.setOnClickListener(this);
     }
 
-    public static String getWord(String difficulty) throws XmlPullParserException{
-        int fileLength;
+    public String getWord(String difficulty, int pairIndex, int wordIndex) throws XmlPullParserException, IOException {
         Random rand = new Random();
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser parser = factory.newPullParser();
+        InputStream in_s;
+        InputStreamReader in_sr;
+
         switch (difficulty) {
             case "intermediate":
-                fileLength = 3378;
-                parser.setInput();
+                in_s = getResources().openRawResource(R.raw.intermediate);
+                in_sr = new InputStreamReader(in_s);
+                parser.setInput(in_sr);
                 break;
             case "hard":
-                fileLength = 213;
+                in_s = getResources().openRawResource(R.raw.hard);
+                in_sr = new InputStreamReader(in_s);
+                parser.setInput(in_sr);
                 break;
             case "easy":
             default:
-                fileLength = 1821;
+                in_s = getResources().openRawResource(R.raw.easy);
+                in_sr = new InputStreamReader(in_s);
+                parser.setInput(in_sr);
                 break;
-
         }
-        rand.nextInt(fileLength);
-        return "shit";
+        int eventType = parser.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT && pairIndex != 0){
+            if (eventType == XmlPullParser.START_TAG)
+                if (parser.getName().equals("pair"))
+                    pairIndex--;
+            eventType = parser.next();
+        }
+        while (parser.getEventType() != XmlPullParser.END_DOCUMENT && wordIndex !=0){
+            if (parser.getEventType() == XmlPullParser.START_TAG)
+                if (parser.getName().equals("word"))
+                    wordIndex--;
+            parser.next();
+        }
+        if (parser.getEventType() == XmlPullParser.TEXT)
+            return parser.getText();
+        if (parser.getEventType() == XmlPullParser.END_DOCUMENT)
+            return "Reached end of document";
+        return "something went wrong";
     }
 
     // http://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext

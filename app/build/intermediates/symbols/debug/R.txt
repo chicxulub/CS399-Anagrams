@@ -583,7 +583,9 @@ int menu menu_choose_difficulty 0x7f0e0001
 int menu menu_game 0x7f0e0002
 int menu menu_splash 0x7f0e0003
 int mipmap ic_launcher 0x7f030000
-int raw words 0x7f060000
+int raw easy 0x7f060000
+int raw hard 0x7f060001
+int raw intermediate 0x7f060002
 int string abc_action_bar_home_description 0x7f070000
 int string abc_action_bar_home_description_format 0x7f070001
 int string abc_action_bar_home_subtitle_description_format 0x7f070002
