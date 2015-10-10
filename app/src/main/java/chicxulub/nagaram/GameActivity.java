@@ -8,6 +8,7 @@ import android.content.res.XmlResourceParser;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,97 +34,86 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String TAG = getClass().getSimpleName();
     private final Activity dis = this;
     private Intent mHomeIntent;
-    private String word, solution;
+    private String word, solution, difficulty;
+    private long startTime, endTime, timeLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // fileLength = #pairs/file - 1
-        int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         TextView text = (TextView)findViewById(R.id.chosenWord);
-        Random rand = new Random();
-        int wordIndex = rand.nextInt(2) + 1;
-        int pairIndex;
-        switch (getIntent().getStringExtra("level")) {
-            case "easy":
-                try {
-                    pairIndex = rand.nextInt(easyLength) + 1;
-                    word = getWord("easy", pairIndex, wordIndex);
-                    if (wordIndex == 2)
-                        solution = getWord("easy", pairIndex, 1);
-                    else
-                        solution = getWord("easy", pairIndex, 2);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "intermediate":
-                try {
-                    pairIndex = rand.nextInt(intermediateLength) + 1;
-                    word = getWord("intermediate", pairIndex, wordIndex);
-                    if (wordIndex == 2)
-                        solution = getWord("intermediate", pairIndex, 1);
-                    else
-                        solution = getWord("intermediate", pairIndex, 2);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "hard":
-                try {
-                    pairIndex = rand.nextInt(hardLength) + 1;
-                    word = getWord("hard", pairIndex, wordIndex);
-                    if (wordIndex == 2)
-                        solution = getWord("hard", pairIndex, 1);
-                    else
-                        solution = getWord("hard", pairIndex, 2);
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
+        difficulty = getIntent().getStringExtra("level");
+        generateWords();
         text.setText(word);
         View view = findViewById(R.id.view);
         setupUI(view);
+        startTime = System.currentTimeMillis();
 
         this.mHomeIntent = new Intent(this, SplashActivity.class);
         Button quit = (Button)findViewById(R.id.quit);
         quit.setOnClickListener(this);
+        Button submit = (Button)findViewById(R.id.submit);
+        submit.setOnClickListener(this);
     }
 
-    public String getWord(String difficulty, int pairIndex, int wordIndex) throws XmlPullParserException, IOException {
+    private void generateWords(){
+        int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
+        int wordIndex, pairIndex;
+        switch (difficulty){
+            case "intermediate":
+                pairIndex = getIndex(intermediateLength, 1);
+                break;
+            case "hard":
+                pairIndex = getIndex(hardLength, 1);
+                break;
+            case "easy":
+            default:
+                pairIndex = getIndex(easyLength, 1);
+        }
+        wordIndex = getIndex(2, 1);
+
+        try {
+            word = getWord (pairIndex, wordIndex);
+            if (wordIndex == 2)
+                solution = getWord(pairIndex, 1);
+            else
+                solution = getWord(pairIndex, 2);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getIndex(int max, int mod){
+        // fileLength = #pairs/file - 1
+        int index;
         Random rand = new Random();
+        index = rand.nextInt(max) + mod;
+        return index;
+    }
+
+    private String getWord(int pairIndex, int wordIndex) throws XmlPullParserException, IOException {
+
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser parser = factory.newPullParser();
         InputStream in_s;
         InputStreamReader in_sr;
-
         switch (difficulty) {
             case "intermediate":
                 in_s = getResources().openRawResource(R.raw.intermediate);
-                in_sr = new InputStreamReader(in_s);
-                parser.setInput(in_sr);
                 break;
             case "hard":
                 in_s = getResources().openRawResource(R.raw.hard);
-                in_sr = new InputStreamReader(in_s);
-                parser.setInput(in_sr);
                 break;
             case "easy":
             default:
                 in_s = getResources().openRawResource(R.raw.easy);
-                in_sr = new InputStreamReader(in_s);
-                parser.setInput(in_sr);
                 break;
         }
+        in_sr = new InputStreamReader(in_s);
+        parser.setInput(in_sr);
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT && pairIndex != 0){
             if (eventType == XmlPullParser.START_TAG)
@@ -169,14 +159,41 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    boolean checkSolution(){
+        EditText userInput = (EditText)findViewById(R.id.editText);
+        if (solution.equalsIgnoreCase(userInput.getText().toString())) {
+            return true;
+        }
+        return false;
+    }
+
     public void onClick(View view) {
+        TextView text = (TextView)findViewById(R.id.chosenWord);
         switch(view.getId()){
             case R.id.quit:
                 startActivity(this.mHomeIntent);
                 break;
             case R.id.submit:
-
+                endTime = System.currentTimeMillis();
+                timeLeft = 30-(endTime-startTime)/1000;
+                if (timeLeft > 0) {
+                    if (checkSolution()) {
+                        text.setText("Congratulations!");
+                        view.invalidate();
+                    } else {
+                        text.setText("You fail!");
+                        view.invalidate();
+                    }
+                    generateWords();
+                    text.setText(word);
+                    ((EditText)findViewById(R.id.editText)).setText("");
+                    view.invalidate();
+                }
+                else {
+                    text.setText("Out of time");
+                    view.invalidate();
+                }
+                break;
         }
     }
-
 }
