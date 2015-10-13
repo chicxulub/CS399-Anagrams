@@ -35,15 +35,14 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = getClass().getSimpleName();
-    private final Activity dis = this;
     private Intent mHomeIntent;
     private String word, solution, difficulty;
     private long startTime, endTime, timeLeft;
-
     private TextView counter;
     private int count = 0;
     private Handler handler = new Handler();
     private int RATE = 1000;
+    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,17 +159,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // http://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager != null && activity != null && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        } else {
+            return;
+        }
+
     }
 
     public void setupUI(View view) {
+        final Activity activity = this;
         //Set up touch listener for non-text box views to hide keyboard.
-
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(dis);
+                    hideSoftKeyboard(activity);
                     return false;
                 }
             });
@@ -184,7 +188,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
     boolean checkSolution(){
         EditText userInput = (EditText)findViewById(R.id.editText);
         if (solution.equalsIgnoreCase(userInput.getText().toString())) {
@@ -201,27 +204,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(this.mHomeIntent);
                 break;
             case R.id.submit:
-                //endTime = System.currentTimeMillis();
-                //timeLeft = 30-(endTime-startTime)/1000;
-                //if (timeLeft > 0) {
-                if (checkSolution()) {
-                    feedback.setText("Correct");
-                    feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                    view.invalidate();
-                } else {
-                    feedback.setText("Failure");
-                    feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+                if (flag) {
+                    if (checkSolution()) {
+                        feedback.setText("Correct");
+                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                        view.invalidate();
+                    } else {
+                        feedback.setText("Failure");
+                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+                        view.invalidate();
+                    }
+                    count = 0;
+                    generateWords();
+                    text.setText(word);
+                    ((EditText) findViewById(R.id.editText)).setText("");
                     view.invalidate();
                 }
-                count = 0;
-                generateWords();
-                text.setText(word);
-                ((EditText) findViewById(R.id.editText)).setText("");
-                view.invalidate();
-                /*else {
-                    text.setText("Out of time");
-                    view.invalidate();
-                }*/
                 break;
             }
     }
@@ -235,13 +233,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void tick() {
         TextView feedback = (TextView)findViewById(R.id.feedback);
         EditText input = (EditText)findViewById(R.id.editText);
-        if (count < 10) {
+        Button submit = (Button)findViewById(R.id.submit);
+        if (count < 30) {
             count++;
             counter.setText(String.valueOf(count));
             handler.postDelayed(counterThread, RATE);
         }
         else {
-            //input.setVisibility(View.INVISIBLE);
+            flag = false;
+            hideSoftKeyboard(GameActivity.this);
+            input.setVisibility(View.INVISIBLE);
+            submit.setVisibility(View.INVISIBLE);
             feedback.setText("Out of Time");
         }
     }
