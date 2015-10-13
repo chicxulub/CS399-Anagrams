@@ -40,30 +40,44 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String word, solution, difficulty;
     private long startTime, endTime, timeLeft;
 
-    TextView counter;
+    private TextView counter;
     private int count = 0;
     private Handler handler = new Handler();
+    private int RATE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        TextView text = (TextView)findViewById(R.id.chosenWord);
-        // rebuild
-        difficulty = getIntent().getStringExtra("level");
-        generateWords();
-        text.setText(word);
-        text.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        // define the intent for the quit button
+        this.mHomeIntent = new Intent(this, SplashActivity.class);
+
+        // set up our counter
+        counter = (TextView)findViewById(R.id.timer);
+
+        tick();
+
+        // get rid of soft keyboard anywhere you touch
         View view = findViewById(R.id.view);
         setupUI(view);
+
+        // get the view for the chosen word
+        TextView text = (TextView)findViewById(R.id.chosenWord);
+        // get the difficulty
+        difficulty = getIntent().getStringExtra("level");
+        // grab a random word and put it in
+        generateWords();
+        text.setText(word);
+
+        // start time
         startTime = System.currentTimeMillis();
 
-        this.mHomeIntent = new Intent(this, SplashActivity.class);
+        // Set the buttons
         Button quit = (Button)findViewById(R.id.quit);
         quit.setOnClickListener(this);
         Button submit = (Button)findViewById(R.id.submit);
         submit.setOnClickListener(this);
-        text.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     private void generateWords(){
@@ -152,7 +166,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setupUI(View view) {
         //Set up touch listener for non-text box views to hide keyboard.
-        if(!(view instanceof EditText)) {
+
+        if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     hideSoftKeyboard(dis);
@@ -167,6 +182,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 setupUI(innerView);
             }
         }
+
     }
 
     boolean checkSolution(){
@@ -180,40 +196,53 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         TextView text = (TextView)findViewById(R.id.chosenWord);
         TextView feedback = (TextView)findViewById(R.id.feedback);
-        switch(view.getId()){
+        switch(view.getId()) {
             case R.id.quit:
                 startActivity(this.mHomeIntent);
                 break;
             case R.id.submit:
-                endTime = System.currentTimeMillis();
-                timeLeft = 30-(endTime-startTime)/1000;
-                if (timeLeft > 0) {
-                    if (checkSolution()) {
-                        feedback.setText("Correct");
-                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                        text.setGravity(Gravity.CENTER);
-                        view.invalidate();
-                    } else {
-                        feedback.setText("Failure");
-                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
-                        view.invalidate();
-                    }
-                    generateWords();
-                    text.setText(word);
-                    ((EditText)findViewById(R.id.editText)).setText("");
+                //endTime = System.currentTimeMillis();
+                //timeLeft = 30-(endTime-startTime)/1000;
+                //if (timeLeft > 0) {
+                if (checkSolution()) {
+                    feedback.setText("Correct");
+                    feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                    view.invalidate();
+                } else {
+                    feedback.setText("Failure");
+                    feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                     view.invalidate();
                 }
-                else {
+                count = 0;
+                generateWords();
+                text.setText(word);
+                ((EditText) findViewById(R.id.editText)).setText("");
+                view.invalidate();
+                /*else {
                     text.setText("Out of time");
                     view.invalidate();
-                }
+                }*/
                 break;
-        }
+            }
     }
 
-    public class counterThread implements Runnable {
+    private Runnable counterThread = new Runnable() {
         public void run() {
+            tick();
+        }
+    };
 
+    public void tick() {
+        TextView feedback = (TextView)findViewById(R.id.feedback);
+        EditText input = (EditText)findViewById(R.id.editText);
+        if (count < 10) {
+            count++;
+            counter.setText(String.valueOf(count));
+            handler.postDelayed(counterThread, RATE);
+        }
+        else {
+            //input.setVisibility(View.INVISIBLE);
+            feedback.setText("Out of Time");
         }
     }
 }

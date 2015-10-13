@@ -16,6 +16,14 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:gravity="center"
+            android:id="@+id/timer"
+            android:text="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
             android:id="@+id/feedback" />
         <RelativeLayout
             android:layout_width="wrap_content"
