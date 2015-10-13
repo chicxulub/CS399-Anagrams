@@ -32,13 +32,13 @@ public class ChooseDifficulty extends AppCompatActivity implements View.OnClickL
         String difficulty = null;
         switch(v.getId()) {
             case R.id.easy:
-                difficulty = "1";
+                difficulty = "easy";
                 break;
             case R.id.intermediate:
-                difficulty = "2";
+                difficulty = "intermediate";
                 break;
             case R.id.hard:
-                difficulty = "3";
+                difficulty = "hard";
                 break;
         }
         this.mIntent.putExtra("level", difficulty);
