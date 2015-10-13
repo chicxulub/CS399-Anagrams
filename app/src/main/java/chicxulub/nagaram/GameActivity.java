@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Xml;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -37,14 +40,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String word, solution, difficulty;
     private long startTime, endTime, timeLeft;
 
+    TextView counter;
+    private int count = 0;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         TextView text = (TextView)findViewById(R.id.chosenWord);
+        // rebuild
         difficulty = getIntent().getStringExtra("level");
         generateWords();
         text.setText(word);
+        text.setGravity(Gravity.CENTER_HORIZONTAL);
         View view = findViewById(R.id.view);
         setupUI(view);
         startTime = System.currentTimeMillis();
@@ -54,6 +63,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         quit.setOnClickListener(this);
         Button submit = (Button)findViewById(R.id.submit);
         submit.setOnClickListener(this);
+        text.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     private void generateWords(){
@@ -169,6 +179,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         TextView text = (TextView)findViewById(R.id.chosenWord);
+        TextView feedback = (TextView)findViewById(R.id.feedback);
         switch(view.getId()){
             case R.id.quit:
                 startActivity(this.mHomeIntent);
@@ -178,10 +189,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 timeLeft = 30-(endTime-startTime)/1000;
                 if (timeLeft > 0) {
                     if (checkSolution()) {
-                        text.setText("Congratulations!");
+                        feedback.setText("Correct");
+                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+                        text.setGravity(Gravity.CENTER);
                         view.invalidate();
                     } else {
-                        text.setText("You fail!");
+                        feedback.setText("Failure");
+                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
                         view.invalidate();
                     }
                     generateWords();
@@ -194,6 +208,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     view.invalidate();
                 }
                 break;
+        }
+    }
+
+    public class counterThread implements Runnable {
+        public void run() {
+
         }
     }
 }
