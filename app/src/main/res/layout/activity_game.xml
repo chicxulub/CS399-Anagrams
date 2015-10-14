@@ -16,10 +16,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/grass"
+        android:paddingLeft="16dp"
         android:layout_alignBottom="@+id/walk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/grass"/>
+    <ImageView
+        android:layout_marginLeft="-85px"
+        android:layout_marginStart="-85px"
+        android:clipChildren="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/poke"
+        android:layout_alignBottom="@+id/walk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/poke"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,6 +43,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:gravity="center"
+            android:visibility="gone"
             android:id="@+id/timer"
             android:text="0" />
 

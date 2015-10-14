@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
@@ -20,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -36,7 +34,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String TAG = getClass().getSimpleName();
     private Intent mHomeIntent;
     private String word, solution, difficulty;
-    private TextView counter;
+    //private TextView counter;
     private int count = 0;
     private Handler handler = new Handler();
     private Handler ahandler = new Handler();
@@ -58,7 +56,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         // start frame animation
-        ImageView img = (ImageView)findViewById(R.id.walk);
+        this.img = (ImageView)findViewById(R.id.walk);
         AnimationDrawable frameAnimation = (AnimationDrawable)img.getBackground();
         frameAnimation.start();
 
@@ -66,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.mHomeIntent = new Intent(this, SplashActivity.class);
 
         // set up our counter
-        counter = (TextView)findViewById(R.id.timer);
+        //counter = (TextView)findViewById(R.id.timer);
 
         this.img = (ImageView)findViewById(R.id.walk);
 
@@ -227,37 +225,40 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         feedback.setText("Correct");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                         view.invalidate();
+
+                        // whether you fail or succeed, push the ram back and reset the start times
+                        long animStartTime = move.getStartTime();
+                        long elapsedTime = System.currentTimeMillis()-this.start-m*1000;
+                        if (m ==0) { m++; }
+                        Transformation t = new Transformation();
+                        move.getTransformation(animStartTime + elapsedTime, t);
+                        float values[] = new float[9];
+                        t.getMatrix().getValues(values);
+                        float x = values[2];
+                        this.img.clearAnimation();
+                        // push the animation back
+
+                        pushBack(x);
+                        deactivateButtons();
+
+                        this.start = System.currentTimeMillis();
+                        ahandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                walk();
+                                activateButtons();
+                            }
+                        }, 2000);
+
+                        // restart start
+                        count = 0;
                     } else {
                         feedback.setText("Failure");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                         view.invalidate();
                     }
 
-                    // whether you fail or succeed, push the ram back and reset the start times
-                    long animStartTime = move.getStartTime();
-                    long elapsedTime = System.currentTimeMillis()-this.start-m*1000;
-                    if (m ==0) { m++; }
-                    Transformation t = new Transformation();
-                    move.getTransformation(animStartTime + elapsedTime, t);
-                    float values[] = new float[9];
-                    t.getMatrix().getValues(values);
-                    float x = values[2];
-                    this.img.clearAnimation();
-                    // push the animation back
-                    pushBack(x);
-                    deactivateButtons();
 
-                    this.start = System.currentTimeMillis();
-                    ahandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            walk();
-                            activateButtons();
-                        }
-                    }, 1000);
-
-                    // restart start
-                    count = 0;
                     generateWords();
                     text.setText(word);
                     ((EditText) findViewById(R.id.editText)).setText("");
@@ -290,14 +291,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+
     public void pushBack(float x) {
         DisplayMetrics dm = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int walkWidth = this.img.getBackground().getIntrinsicWidth();
+
+        ImageView fenga = (ImageView)findViewById(R.id.poke);
+        Log.d(TAG, String.valueOf(dm.widthPixels+x));
+        // go to the ram and push him back
+        TranslateAnimation push = new TranslateAnimation((dm.widthPixels + x)-walkWidth+5, dm.widthPixels-walkWidth, 0, 0);
+        push.setDuration(1000);
 
         TranslateAnimation back = new TranslateAnimation(x, 0, 0, 0);
         back.setDuration(1000);
         back.setFillAfter(true);
         this.img.startAnimation(back);
+        fenga.startAnimation(push);
     }
 
     public void walk() {
@@ -320,7 +331,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if (count < 30) {
             count++;
-            counter.setText(String.valueOf(count));
+            //counter.setText(String.valueOf(count));
             handler.postDelayed(counterThread, RATE);
         }
         else {
@@ -329,6 +340,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             hideSoftKeyboard(GameActivity.this);
             input.setVisibility(View.INVISIBLE);
             submit.setVisibility(View.INVISIBLE);
+            feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
             feedback.setText("Out of Time");
         }
     }
