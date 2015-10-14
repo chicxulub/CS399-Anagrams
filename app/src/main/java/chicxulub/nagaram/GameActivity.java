@@ -36,6 +36,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = getClass().getSimpleName();
     private Intent mHomeIntent;
+    private Intent ScoreIntent;
     private String word, solution, difficulty;
     private long startTime, endTime, timeLeft;
     private TextView counter;
@@ -43,14 +44,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Handler handler = new Handler();
     private int RATE = 1000;
     private boolean flag = true;
+    private int score;
+    private SavedDataHelper saveData;
+    private int timeLimit = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // create the helper object to access saved data if not already created
+        saveData = saveData.getInstance(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         // define the intent for the quit button
         this.mHomeIntent = new Intent(this, SplashActivity.class);
+        this.ScoreIntent = new Intent(this, ScoreboardActivity.class);
 
         // set up our counter
         counter = (TextView)findViewById(R.id.timer);
@@ -206,6 +214,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.submit:
                 if (flag) {
                     if (checkSolution()) {
+                        score++;
                         feedback.setText("Correct");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                         view.invalidate();
@@ -220,6 +229,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     ((EditText) findViewById(R.id.editText)).setText("");
                     view.invalidate();
                 }
+                else {
+                    EditText userInput = (EditText)findViewById(R.id.editText);
+                    if ("".equals(userInput.getText().toString()))
+                        saveData.truncate();
+                    else
+                        saveData.insert(userInput.getText().toString(), score);
+                    startActivity(this.ScoreIntent);
+                }
                 break;
             }
     }
@@ -233,8 +250,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void tick() {
         TextView feedback = (TextView)findViewById(R.id.feedback);
         EditText input = (EditText)findViewById(R.id.editText);
-        Button submit = (Button)findViewById(R.id.submit);
-        if (count < 30) {
+        Button quit = (Button)findViewById(R.id.quit);
+        if (count < timeLimit) {
             count++;
             counter.setText(String.valueOf(count));
             handler.postDelayed(counterThread, RATE);
@@ -242,9 +259,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         else {
             flag = false;
             hideSoftKeyboard(GameActivity.this);
-            input.setVisibility(View.INVISIBLE);
-            submit.setVisibility(View.INVISIBLE);
-            feedback.setText("Out of Time");
+            input.setText("");
+            quit.setVisibility(View.INVISIBLE);
+            feedback.setText("Out of Time\nEnter your initials");
         }
     }
 }

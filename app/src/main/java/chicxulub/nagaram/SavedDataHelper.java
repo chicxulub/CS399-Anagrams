@@ -10,18 +10,27 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by trollham on 10/13/15.
  */
-public class SavedData extends SQLiteOpenHelper {
+public class SavedDataHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "nagaram.db";
     private static final int DATABASE_VERSION = 1;
     public static final String TABLE_NAME = "scores";
     public static final String _ID = BaseColumns._ID;
     public static final String NAME = "name";
     public static final String SCORE = "score";
+    private static SavedDataHelper instance = null;
 
-    public SavedData (Context context){
+    public static SavedDataHelper getInstance(Context context){
+        if (instance == null) instance = new SavedDataHelper(context);
+        return instance;
+    }
+
+    private SavedDataHelper (Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -45,18 +54,29 @@ public class SavedData extends SQLiteOpenHelper {
         values.put(NAME, name);
         values.put(SCORE, score);
         db.insertOrThrow(TABLE_NAME, null, values);
+        System.out.println("New entry: " + name + ", " + score);
     }
-    public Cursor all (Activity activity){
+    public List<String> all (Activity activity){
+        List<String> list = new ArrayList<String>();
         String[] from = {_ID, NAME, SCORE};
         String order = SCORE;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, from, null, null, null, null, order);
-        // startManagingCursor is deprecated, need to get the LoadManager from activity to create a Cursor loader
-        activity.startManagingCursor(cursor);
-        return cursor;
+        if (cursor.moveToFirst()){
+            do{
+                list.add(cursor.getString(1));
+            }while (cursor.moveToNext());
+        }
+        return list;
     }
     public long count(){
         SQLiteDatabase db = getReadableDatabase();
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+    }
+
+    public void truncate(){
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "DELETE FROM " + TABLE_NAME;
+        db.execSQL(sql);
     }
 }

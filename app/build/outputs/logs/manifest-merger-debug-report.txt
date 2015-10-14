@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:2:1-47:12
+ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:2:1-52:12
 	package
 		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:3:5-32
 		INJECTED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml
@@ -14,7 +14,7 @@ ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/Andr
 		INJECTED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml
 		INJECTED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml
 application
-ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:5:5-45:19
+ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:5:5-50:19
 MERGED from [com.android.support:appcompat-v7:23.0.1] /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/AndroidManifest.xml:22:5-20
 	android:label
@@ -75,6 +75,14 @@ ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/Andr
 		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:40:13-59
 	android:name
 		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:38:13-41
+activity#chicxulub.nagaram.ScoreboardActivity
+ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:45:9-49:20
+	android:label
+		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:47:13-62
+	android:parentActivityName
+		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:48:13-55
+	android:name
+		ADDED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml:46:13-47
 uses-sdk
 INJECTED from /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.0.1] /home/trollham/AndroidStudioProjects/CS399-Anagrams/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:20:5-43
