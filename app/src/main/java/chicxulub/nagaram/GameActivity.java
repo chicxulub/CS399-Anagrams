@@ -43,6 +43,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int RATE = 1000;
     private boolean flag = true;
 
+    public int m = 0;
     public GameActivity dis = this;
     public ImageView img;
     public TranslateAnimation move;
@@ -234,18 +235,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     // whether you fail or succeed, push the ram back and reset the start times
                     long animStartTime = move.getStartTime();
-                    long elapsedTime = System.currentTimeMillis()-this.start;
+                    long elapsedTime = System.currentTimeMillis()-this.start-m*1000;
+                    if (m ==0) { m++; }
                     Transformation t = new Transformation();
                     move.getTransformation(animStartTime + elapsedTime, t);
                     float values[] = new float[9];
                     t.getMatrix().getValues(values);
                     float x = values[2];
                     this.img.clearAnimation();
-
-                    this.
                     // push the animation back
                     pushBack(x);
                     deactivateButtons();
+
                     this.start = System.currentTimeMillis();
                     ahandler.postDelayed(new Runnable() {
                         @Override
@@ -253,7 +254,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             walk();
                             activateButtons();
                         }
-                    }, 2500);
+                    }, 1000);
 
                     // restart start
                     count = 0;
@@ -294,7 +295,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         TranslateAnimation back = new TranslateAnimation(x, 0, 0, 0);
-        back.setDuration(2500);
+        back.setDuration(1000);
         back.setFillAfter(true);
         this.img.startAnimation(back);
     }
