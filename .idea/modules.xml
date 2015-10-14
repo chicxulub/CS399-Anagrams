@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Nagaram.iml" filepath="$PROJECT_DIR$/Nagaram.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+=======
+>>>>>>> 2187b8debf97b729a580dd22653a5b57049a5af9
     </modules>
   </component>
 </project>
