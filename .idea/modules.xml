@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CS399-Anagrams.iml" filepath="$PROJECT_DIR$/CS399-Anagrams.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Nagaram.iml" filepath="$PROJECT_DIR$/Nagaram.iml" />
     </modules>
   </component>
 </project>
