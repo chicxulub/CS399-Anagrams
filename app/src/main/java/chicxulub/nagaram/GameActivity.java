@@ -236,20 +236,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     long animStartTime = move.getStartTime();
                     long elapsedTime = System.currentTimeMillis()-this.start;
                     Transformation t = new Transformation();
-                    Log.d(TAG, String.valueOf(animStartTime));
                     move.getTransformation(animStartTime + elapsedTime, t);
                     float values[] = new float[9];
                     t.getMatrix().getValues(values);
                     float x = values[2];
                     this.img.clearAnimation();
+
+                    this.
+                    // push the animation back
                     pushBack(x);
+                    deactivateButtons();
+                    this.start = System.currentTimeMillis();
                     ahandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             walk();
+                            activateButtons();
                         }
                     }, 2500);
-                    this.start = System.currentTimeMillis();
+
+                    // restart start
                     count = 0;
                     generateWords();
                     text.setText(word);
@@ -258,6 +264,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             }
+    }
+
+    public void deactivateButtons() {
+        EditText input = (EditText)findViewById(R.id.editText);
+        Button submit = (Button)findViewById(R.id.submit);
+        input.setFocusable(false);
+        input.setEnabled(false);
+        submit.setEnabled(false);
+    }
+
+    public void activateButtons() {
+        EditText input = (EditText)findViewById(R.id.editText);
+        Button submit = (Button)findViewById(R.id.submit);
+        input.setFocusable(true);
+        input.setFocusableInTouchMode(true);
+        input.setEnabled(true);
+        submit.setEnabled(true);
     }
 
     private Runnable counterThread = new Runnable() {
