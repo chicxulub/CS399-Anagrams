@@ -17,6 +17,7 @@ import android.widget.TextView;
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
     private Intent aboutIntent;
     private Intent playIntent;
+    public SavedDataHelper saveData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         // rock the image
         final ImageView animationTarget = (ImageView) this.findViewById(R.id.imageView);
         final Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        saveData.getInstance(this);
 
         new Thread(new Runnable() {
             public void run() {

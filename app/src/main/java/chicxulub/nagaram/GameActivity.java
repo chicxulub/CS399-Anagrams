@@ -35,6 +35,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = getClass().getSimpleName();
     private Intent mHomeIntent;
+    private Intent ScoreIntent;
     private String word, solution, difficulty;
     private TextView counter;
     private int count = 0;
@@ -42,6 +43,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Handler ahandler = new Handler();
     private int RATE = 1000;
     private boolean flag = true;
+    private int score;
+    private SavedDataHelper saveData;
+    private int timeLimit = 5;
 
     public GameActivity dis = this;
     public ImageView img;
@@ -50,24 +54,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public long animStartTime;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // create the helper object to access saved data if not already created
+        saveData = saveData.getInstance(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         // start frame animation
-        ImageView img = (ImageView)findViewById(R.id.walk);
-        AnimationDrawable frameAnimation = (AnimationDrawable)img.getBackground();
+        ImageView img = (ImageView) findViewById(R.id.walk);
+        AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
         frameAnimation.start();
 
         // define the intent for the quit button
         this.mHomeIntent = new Intent(this, SplashActivity.class);
+        this.ScoreIntent = new Intent(this, ScoreboardActivity.class);
 
         // set up our counter
-        counter = (TextView)findViewById(R.id.timer);
+        counter = (TextView) findViewById(R.id.timer);
 
-        this.img = (ImageView)findViewById(R.id.walk);
+        this.img = (ImageView) findViewById(R.id.walk);
 
         tick();
         walk();
@@ -79,7 +86,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setupUI(view);
 
         // get the view for the chosen word
-        TextView text = (TextView)findViewById(R.id.chosenWord);
+        TextView text = (TextView) findViewById(R.id.chosenWord);
         // get the difficulty
         difficulty = getIntent().getStringExtra("level");
         // grab a random word and put it in
@@ -90,16 +97,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         //startTime = System.currentTimeMillis();
 
         // Set the buttons
-        Button quit = (Button)findViewById(R.id.quit);
+        Button quit = (Button) findViewById(R.id.quit);
         quit.setOnClickListener(this);
-        Button submit = (Button)findViewById(R.id.submit);
+        Button submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(this);
     }
 
-    private void generateWords(){
+    private void generateWords() {
         int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
         int wordIndex, pairIndex;
-        switch (difficulty){
+        switch (difficulty) {
             case "intermediate":
                 pairIndex = getIndex(intermediateLength, 1);
                 break;
@@ -113,7 +120,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         wordIndex = getIndex(2, 1);
 
         try {
-            word = getWord (pairIndex, wordIndex);
+            word = getWord(pairIndex, wordIndex);
             if (wordIndex == 2)
                 solution = getWord(pairIndex, 1);
             else
@@ -125,7 +132,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private int getIndex(int max, int mod){
+    private int getIndex(int max, int mod) {
         // fileLength = #pairs/file - 1
         int index;
         Random rand = new Random();
@@ -155,13 +162,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         in_sr = new InputStreamReader(in_s);
         parser.setInput(in_sr);
         int eventType = parser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT && pairIndex != 0){
+        while (eventType != XmlPullParser.END_DOCUMENT && pairIndex != 0) {
             if (eventType == XmlPullParser.START_TAG)
                 if (parser.getName().equals("pair"))
                     pairIndex--;
             eventType = parser.next();
         }
-        while (parser.getEventType() != XmlPullParser.END_DOCUMENT && wordIndex !=0){
+        while (parser.getEventType() != XmlPullParser.END_DOCUMENT && wordIndex != 0) {
             if (parser.getEventType() == XmlPullParser.START_TAG)
                 if (parser.getName().equals("word"))
                     wordIndex--;
@@ -176,8 +183,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // http://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if(inputMethodManager != null && activity != null && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && activity != null && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         } else {
             return;
@@ -205,8 +212,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-    boolean checkSolution(){
-        EditText userInput = (EditText)findViewById(R.id.editText);
+
+    boolean checkSolution() {
+        EditText userInput = (EditText) findViewById(R.id.editText);
         if (solution.equalsIgnoreCase(userInput.getText().toString())) {
             return true;
         }
@@ -214,15 +222,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View view) {
-        TextView text = (TextView)findViewById(R.id.chosenWord);
-        TextView feedback = (TextView)findViewById(R.id.feedback);
-        switch(view.getId()) {
+        TextView text = (TextView) findViewById(R.id.chosenWord);
+        TextView feedback = (TextView) findViewById(R.id.feedback);
+        switch (view.getId()) {
             case R.id.quit:
                 startActivity(this.mHomeIntent);
                 break;
             case R.id.submit:
                 if (flag) {
                     if (checkSolution()) {
+                        score++;
                         feedback.setText("Correct");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                         view.invalidate();
@@ -234,7 +243,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     // whether you fail or succeed, push the ram back and reset the start times
                     long animStartTime = move.getStartTime();
-                    long elapsedTime = System.currentTimeMillis()-this.start;
+                    long elapsedTime = System.currentTimeMillis() - this.start;
                     Transformation t = new Transformation();
                     move.getTransformation(animStartTime + elapsedTime, t);
                     float values[] = new float[9];
@@ -243,8 +252,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     this.img.clearAnimation();
 
                     this.
-                    // push the animation back
-                    pushBack(x);
+                            // push the animation back
+                                    pushBack(x);
                     deactivateButtons();
                     this.start = System.currentTimeMillis();
                     ahandler.postDelayed(new Runnable() {
@@ -261,22 +270,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     text.setText(word);
                     ((EditText) findViewById(R.id.editText)).setText("");
                     view.invalidate();
+                } else {
+                    EditText userInput = (EditText) findViewById(R.id.editText);
+                    if ("".equals(userInput.getText().toString()))
+                        saveData.truncate();
+                    else
+                        saveData.insert(userInput.getText().toString(), score);
+                    startActivity(this.ScoreIntent);
                 }
                 break;
-            }
+        }
     }
 
     public void deactivateButtons() {
-        EditText input = (EditText)findViewById(R.id.editText);
-        Button submit = (Button)findViewById(R.id.submit);
+        EditText input = (EditText) findViewById(R.id.editText);
+        Button submit = (Button) findViewById(R.id.submit);
         input.setFocusable(false);
         input.setEnabled(false);
         submit.setEnabled(false);
     }
 
     public void activateButtons() {
-        EditText input = (EditText)findViewById(R.id.editText);
-        Button submit = (Button)findViewById(R.id.submit);
+        EditText input = (EditText) findViewById(R.id.editText);
+        Button submit = (Button) findViewById(R.id.submit);
         input.setFocusable(true);
         input.setFocusableInTouchMode(true);
         input.setEnabled(true);
@@ -301,11 +317,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public void walk() {
         DisplayMetrics dm = new DisplayMetrics();
-        this.getWindowManager().getDefaultDisplay().getMetrics( dm );
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         int walkWidth = this.img.getBackground().getIntrinsicWidth();
 
-        move = new TranslateAnimation(0, -dm.widthPixels+walkWidth, 0, 0);
+        move = new TranslateAnimation(0, -dm.widthPixels + walkWidth, 0, 0);
         move.setInterpolator(new LinearInterpolator());
         move.setDuration(30000);
         move.setFillAfter(true);
@@ -313,22 +329,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void tick() {
-        TextView feedback = (TextView)findViewById(R.id.feedback);
-        EditText input = (EditText)findViewById(R.id.editText);
-        Button submit = (Button)findViewById(R.id.submit);
+        TextView feedback = (TextView) findViewById(R.id.feedback);
+        EditText input = (EditText) findViewById(R.id.editText);
+        Button submit = (Button) findViewById(R.id.submit);
 
         if (count < 30) {
-            count++;
-            counter.setText(String.valueOf(count));
-            handler.postDelayed(counterThread, RATE);
-        }
-        else {
-            flag = false;
+            Button quit = (Button) findViewById(R.id.quit);
+            if (count < timeLimit) {
+                count++;
+                counter.setText(String.valueOf(count));
+                handler.postDelayed(counterThread, RATE);
+            } else {
+                flag = false;
 
-            hideSoftKeyboard(GameActivity.this);
-            input.setVisibility(View.INVISIBLE);
-            submit.setVisibility(View.INVISIBLE);
-            feedback.setText("Out of Time");
+                hideSoftKeyboard(GameActivity.this);
+                input.setText("");
+                quit.setVisibility(View.INVISIBLE);
+                feedback.setText("Out of Time\nEnter your initials");
+            }
         }
     }
 }

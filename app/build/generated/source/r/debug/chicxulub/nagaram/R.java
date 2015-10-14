@@ -1578,7 +1578,11 @@ containing a value of this type.
         public static final int walk_animation=0x7f020045;
     }
     public static final class id {
+<<<<<<< HEAD
         public static final int action0=0x7f0d005c;
+=======
+        public static final int action0=0x7f0d005e;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int action_about=0x7f0d005b;
         public static final int action_bar=0x7f0d003e;
         public static final int action_bar_activity_content=0x7f0d0000;
@@ -1588,22 +1592,37 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f0d0022;
         public static final int action_bar_title=0x7f0d0021;
         public static final int action_context_bar=0x7f0d003f;
+<<<<<<< HEAD
         public static final int action_divider=0x7f0d0060;
+=======
+        public static final int action_divider=0x7f0d0062;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int action_menu_divider=0x7f0d0002;
         public static final int action_menu_presenter=0x7f0d0003;
         public static final int action_mode_bar=0x7f0d003b;
         public static final int action_mode_bar_stub=0x7f0d003a;
         public static final int action_mode_close_button=0x7f0d0023;
+<<<<<<< HEAD
         public static final int action_settings=0x7f0d0069;
+=======
+        public static final int action_settings=0x7f0d006b;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int activity_chooser_view_content=0x7f0d0024;
         public static final int alertTitle=0x7f0d002e;
         public static final int always=0x7f0d001b;
         public static final int beginning=0x7f0d0018;
         public static final int buttonPanel=0x7f0d0034;
+<<<<<<< HEAD
         public static final int cancel_action=0x7f0d005d;
         public static final int checkbox=0x7f0d0036;
         public static final int chosenWord=0x7f0d0055;
         public static final int chronometer=0x7f0d0063;
+=======
+        public static final int cancel_action=0x7f0d005f;
+        public static final int checkbox=0x7f0d0036;
+        public static final int chosenWord=0x7f0d0053;
+        public static final int chronometer=0x7f0d0065;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int collapseActionView=0x7f0d001c;
         public static final int contentPanel=0x7f0d002f;
         public static final int custom=0x7f0d0033;
@@ -1615,7 +1634,11 @@ containing a value of this type.
         public static final int editText=0x7f0d0056;
         public static final int edit_query=0x7f0d0040;
         public static final int end=0x7f0d0019;
+<<<<<<< HEAD
         public static final int end_padder=0x7f0d0068;
+=======
+        public static final int end_padder=0x7f0d006a;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int expand_activities_button=0x7f0d0025;
         public static final int expanded_menu=0x7f0d0035;
         public static final int feedback=0x7f0d0054;
@@ -1627,6 +1650,7 @@ containing a value of this type.
         public static final int ifRoom=0x7f0d001d;
         public static final int image=0x7f0d0026;
         public static final int imageView=0x7f0d0059;
+<<<<<<< HEAD
         public static final int info=0x7f0d0067;
         public static final int intermediate=0x7f0d004e;
         public static final int line1=0x7f0d0061;
@@ -1634,6 +1658,19 @@ containing a value of this type.
         public static final int listMode=0x7f0d0009;
         public static final int list_item=0x7f0d0028;
         public static final int media_actions=0x7f0d005f;
+=======
+        public static final int info=0x7f0d0069;
+        public static final int intermediate=0x7f0d004e;
+        public static final int line1=0x7f0d0063;
+        public static final int line3=0x7f0d0067;
+        public static final int listMode=0x7f0d0009;
+        public static final int list_item=0x7f0d0028;
+        public static final int list_item_scoreboard_textview=0x7f0d0058;
+        public static final int list_item_scoreboard_textview_name=0x7f0d005c;
+        public static final int list_item_scoreboard_textview_score=0x7f0d005d;
+        public static final int listview_scoreboard=0x7f0d0057;
+        public static final int media_actions=0x7f0d0061;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int middle=0x7f0d001a;
         public static final int multiply=0x7f0d0013;
         public static final int never=0x7f0d001e;
@@ -1666,6 +1703,7 @@ containing a value of this type.
         public static final int src_atop=0x7f0d0015;
         public static final int src_in=0x7f0d0016;
         public static final int src_over=0x7f0d0017;
+<<<<<<< HEAD
         public static final int status_bar_latest_event_content=0x7f0d005e;
         public static final int submit=0x7f0d0057;
         public static final int submit_area=0x7f0d0049;
@@ -1675,6 +1713,17 @@ containing a value of this type.
         public static final int textSpacerNoButtons=0x7f0d0031;
         public static final int time=0x7f0d0062;
         public static final int timer=0x7f0d0053;
+=======
+        public static final int status_bar_latest_event_content=0x7f0d0060;
+        public static final int submit=0x7f0d0055;
+        public static final int submit_area=0x7f0d0049;
+        public static final int tabMode=0x7f0d000b;
+        public static final int text=0x7f0d0068;
+        public static final int text2=0x7f0d0066;
+        public static final int textSpacerNoButtons=0x7f0d0031;
+        public static final int time=0x7f0d0064;
+        public static final int timer=0x7f0d0051;
+>>>>>>> d871acff84107015086203995f5b734a20052620
         public static final int title=0x7f0d002a;
         public static final int title_template=0x7f0d002d;
         public static final int topPanel=0x7f0d002c;
@@ -1720,25 +1769,28 @@ containing a value of this type.
         public static final int activity_about_nagaram=0x7f040018;
         public static final int activity_choose_difficulty=0x7f040019;
         public static final int activity_game=0x7f04001a;
-        public static final int activity_splash=0x7f04001b;
-        public static final int notification_media_action=0x7f04001c;
-        public static final int notification_media_cancel_action=0x7f04001d;
-        public static final int notification_template_big_media=0x7f04001e;
-        public static final int notification_template_big_media_narrow=0x7f04001f;
-        public static final int notification_template_lines=0x7f040020;
-        public static final int notification_template_media=0x7f040021;
-        public static final int notification_template_part_chronometer=0x7f040022;
-        public static final int notification_template_part_time=0x7f040023;
-        public static final int select_dialog_item_material=0x7f040024;
-        public static final int select_dialog_multichoice_material=0x7f040025;
-        public static final int select_dialog_singlechoice_material=0x7f040026;
-        public static final int support_simple_spinner_dropdown_item=0x7f040027;
+        public static final int activity_scoreboard=0x7f04001b;
+        public static final int activity_splash=0x7f04001c;
+        public static final int list_item_scoreboard=0x7f04001d;
+        public static final int notification_media_action=0x7f04001e;
+        public static final int notification_media_cancel_action=0x7f04001f;
+        public static final int notification_template_big_media=0x7f040020;
+        public static final int notification_template_big_media_narrow=0x7f040021;
+        public static final int notification_template_lines=0x7f040022;
+        public static final int notification_template_media=0x7f040023;
+        public static final int notification_template_part_chronometer=0x7f040024;
+        public static final int notification_template_part_time=0x7f040025;
+        public static final int select_dialog_item_material=0x7f040026;
+        public static final int select_dialog_multichoice_material=0x7f040027;
+        public static final int select_dialog_singlechoice_material=0x7f040028;
+        public static final int support_simple_spinner_dropdown_item=0x7f040029;
     }
     public static final class menu {
         public static final int menu_about_nagaram=0x7f0e0000;
         public static final int menu_choose_difficulty=0x7f0e0001;
         public static final int menu_game=0x7f0e0002;
-        public static final int menu_splash=0x7f0e0003;
+        public static final int menu_scoreboard=0x7f0e0003;
+        public static final int menu_splash=0x7f0e0004;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
@@ -1776,6 +1828,7 @@ containing a value of this type.
         public static final int title_activity_about_nagaram=0x7f070018;
         public static final int title_activity_choose_difficulty=0x7f070019;
         public static final int title_activity_game=0x7f07001a;
+        public static final int title_activity_scoreboard=0x7f07001b;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f09007a;
