@@ -1,33 +1,32 @@
 package chicxulub.nagaram;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
-import android.util.Xml;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,17 +36,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String TAG = getClass().getSimpleName();
     private Intent mHomeIntent;
     private String word, solution, difficulty;
-    private long startTime, endTime, timeLeft;
     private TextView counter;
     private int count = 0;
     private Handler handler = new Handler();
+    private Handler ahandler = new Handler();
     private int RATE = 1000;
     private boolean flag = true;
+
+    public GameActivity dis = this;
+    public ImageView img;
+    public TranslateAnimation move;
+    public long start;
+    public long animStartTime;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // start frame animation
+        ImageView img = (ImageView)findViewById(R.id.walk);
+        AnimationDrawable frameAnimation = (AnimationDrawable)img.getBackground();
+        frameAnimation.start();
 
         // define the intent for the quit button
         this.mHomeIntent = new Intent(this, SplashActivity.class);
@@ -55,7 +67,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         // set up our counter
         counter = (TextView)findViewById(R.id.timer);
 
+        this.img = (ImageView)findViewById(R.id.walk);
+
         tick();
+        walk();
+
+        this.start = System.currentTimeMillis();
 
         // get rid of soft keyboard anywhere you touch
         View view = findViewById(R.id.view);
@@ -70,7 +87,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         text.setText(word);
 
         // start time
-        startTime = System.currentTimeMillis();
+        //startTime = System.currentTimeMillis();
 
         // Set the buttons
         Button quit = (Button)findViewById(R.id.quit);
@@ -214,6 +231,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                         view.invalidate();
                     }
+
+                    // whether you fail or succeed, push the ram back and reset the start times
+                    long animStartTime = move.getStartTime();
+                    long elapsedTime = System.currentTimeMillis()-this.start;
+                    Transformation t = new Transformation();
+                    Log.d(TAG, String.valueOf(animStartTime));
+                    move.getTransformation(animStartTime + elapsedTime, t);
+                    float values[] = new float[9];
+                    t.getMatrix().getValues(values);
+                    float x = values[2];
+                    this.img.clearAnimation();
+                    pushBack(x);
+                    ahandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            walk();
+                        }
+                    }, 2500);
+                    this.start = System.currentTimeMillis();
                     count = 0;
                     generateWords();
                     text.setText(word);
@@ -230,10 +266,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    public void pushBack(float x) {
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        TranslateAnimation back = new TranslateAnimation(x, 0, 0, 0);
+        back.setDuration(2500);
+        back.setFillAfter(true);
+        this.img.startAnimation(back);
+    }
+
+    public void walk() {
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics( dm );
+
+        int walkWidth = this.img.getBackground().getIntrinsicWidth();
+
+        move = new TranslateAnimation(0, -dm.widthPixels+walkWidth, 0, 0);
+        move.setInterpolator(new LinearInterpolator());
+        move.setDuration(30000);
+        move.setFillAfter(true);
+        this.img.startAnimation(move);
+    }
+
     public void tick() {
         TextView feedback = (TextView)findViewById(R.id.feedback);
         EditText input = (EditText)findViewById(R.id.editText);
         Button submit = (Button)findViewById(R.id.submit);
+
         if (count < 30) {
             count++;
             counter.setText(String.valueOf(count));
@@ -241,6 +301,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             flag = false;
+
             hideSoftKeyboard(GameActivity.this);
             input.setVisibility(View.INVISIBLE);
             submit.setVisibility(View.INVISIBLE);
