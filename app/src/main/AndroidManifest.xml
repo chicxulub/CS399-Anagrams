@@ -42,6 +42,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="chicxulub.nagaram.ChooseDifficulty" />
         </activity>
+        <activity
+            android:name=".ScoreboardActivity"
+            android:label="@string/title_activity_scoreboard"
+            android:parentActivityName=".GameActivity">
+        </activity>
     </application>
 
 </manifest>
