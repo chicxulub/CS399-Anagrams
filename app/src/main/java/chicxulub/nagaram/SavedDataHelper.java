@@ -64,7 +64,9 @@ public class SavedDataHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME, from, null, null, null, null, order);
         if (cursor.moveToFirst()){
             do{
-                list.add(cursor.getString(1));
+                // changed list add
+                 list.add(cursor.getString(1) + " " + String.valueOf(cursor.getInt(2)));
+                //list.add(cursor.getString(1));
             }while (cursor.moveToNext());
         }
         return list;

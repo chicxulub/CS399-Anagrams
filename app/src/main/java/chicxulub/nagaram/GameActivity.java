@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -227,7 +228,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.submit:
                 if (flag) {
                     if (checkSolution()) {
-                        score++;
+                        score = score + ((30 - count) * 100);
                         feedback.setText("Correct");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                         view.invalidate();
@@ -243,7 +244,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         float x = values[2];
                         this.img.clearAnimation();
                         // push the animation back
-
                         pushBack(x);
                         deactivateButtons();
 
@@ -264,14 +264,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         view.invalidate();
                     }
 
-
                     generateWords();
                     text.setText(word);
                     ((EditText) findViewById(R.id.editText)).setText("");
                     view.invalidate();
                 }
                 else {
+                    // is it working?
                     EditText userInput = (EditText)findViewById(R.id.editText);
+                    userInput.setFilters(new InputFilter[] { new InputFilter.LengthFilter(3) });
                     if ("".equals(userInput.getText().toString()))
                         saveData.truncate();
                     else

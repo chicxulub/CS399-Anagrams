@@ -20,12 +20,12 @@ public class ScoreboardActivity extends AppCompatActivity {
     private SavedDataHelper saveData;
     ArrayAdapter<String> arrayAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
         saveData = saveData.getInstance(this);
+
 
         List<String> all = saveData.all(this);
         if (all.size() > 0)
@@ -37,10 +37,9 @@ public class ScoreboardActivity extends AppCompatActivity {
                 R.id.list_item_scoreboard_textview, all);
         System.out.println(arrayAdapter.getCount());
         ListView listView = (ListView)findViewById(R.id.listview_scoreboard);
-        System.out.println("ListView found");
         Log.d(getClass().getSimpleName(), String.valueOf(listView));
         listView.setAdapter(arrayAdapter);
-        System.out.println("finished");
+
     }
 /*    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
