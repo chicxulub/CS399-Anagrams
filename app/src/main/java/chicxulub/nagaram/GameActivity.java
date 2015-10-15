@@ -29,6 +29,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +45,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag = true;
     private SavedDataHelper saveData;
     private int score=0;
+    private int i = 0;
 
     public int m = 0;
     public GameActivity dis = this;
@@ -51,8 +53,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public TranslateAnimation move;
     public long start;
     public long animStartTime;
-
-
+    public ArrayList<String[]> wordArray = new ArrayList<String[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         difficulty = getIntent().getStringExtra("level");
         // grab a random word and put it in
         generateWords();
+        setWord();
         text.setText(word);
 
         // start time
@@ -101,6 +103,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         submit.setOnClickListener(this);
     }
 
+/*
     private void generateWords(){
         int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
         int wordIndex, pairIndex;
@@ -129,6 +132,54 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
     }
+*/
+
+    private void setWord() {
+        String pair[] = wordArray.get(i);
+        Log.d(TAG, String.valueOf(i));
+        Log.d(TAG, String.valueOf(pair[0]));
+        word = pair[0];
+        solution = pair[1];
+        i++;
+    }
+
+    private void generateWords() {
+        int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
+        int wordIndex, pairIndex;
+        while (wordArray.size() < 10) {
+            switch (difficulty) {
+                case "intermediate":
+                    pairIndex = getIndex(intermediateLength, 1);
+                    break;
+                case "hard":
+                    pairIndex = getIndex(hardLength, 1);
+                    break;
+                case "easy":
+                default:
+                    pairIndex = getIndex(easyLength, 1);
+            }
+            wordIndex = getIndex(2, 1);
+
+            String new_word;
+            String new_solution;
+            String pair[] = new String[2];
+            try {
+                new_word = getWord(pairIndex, wordIndex);
+                pair[0] = new_word;
+                if (wordIndex == 2)
+                    new_solution = getWord(pairIndex, 1);
+                else
+                    new_solution = getWord(pairIndex, 2);
+                pair[1] = new_solution;
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            wordArray.add(pair);
+        }
+    }
+
 
     private int getIndex(int max, int mod){
         // fileLength = #pairs/file - 1
@@ -246,15 +297,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         // push the animation back
                         pushBack(x);
                         deactivateButtons();
-
                         this.start = System.currentTimeMillis();
-                        ahandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                walk();
-                                activateButtons();
-                            }
-                        }, 2000);
+                        if(i<10) {
+                            ahandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    walk();
+                                    activateButtons();
+                                }
+                            }, 2000);
+                        }
 
                         // restart start
                         count = 0;
@@ -264,20 +316,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         view.invalidate();
                     }
 
-                    generateWords();
+                    setWord();
                     text.setText(word);
                     ((EditText) findViewById(R.id.editText)).setText("");
                     view.invalidate();
+                    if (i == 9) { // at the last word
+                        flag = false;
+                    }
                 }
                 else {
-                    // is it working?
-                    EditText userInput = (EditText)findViewById(R.id.editText);
-                    userInput.setFilters(new InputFilter[] { new InputFilter.LengthFilter(3) });
-                    if ("".equals(userInput.getText().toString()))
-                        saveData.truncate();
-                    else
-                        saveData.insert(userInput.getText().toString(), score);
-                    startActivity(this.ScoreIntent);
+                    EditText userInput = (EditText) findViewById(R.id.editText);
+                    if (i == 9) {
+                        userInput.setText("");
+                        Button quit = (Button)findViewById(R.id.quit);
+                        quit.setVisibility(View.INVISIBLE);
+                        TextView chosenWord = (TextView)findViewById(R.id.chosenWord);
+                        chosenWord.setText("");
+                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
+                        feedback.setText("Challenge Finished\nEnter your initials");
+                        activateButtons();
+                    }
+                    else {
+                        userInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+                        if ("".equals(userInput.getText().toString()))
+                            saveData.truncate();
+                        else
+                            saveData.insert(userInput.getText().toString(), score);
+                        startActivity(this.ScoreIntent);
+                    }
                 }
                 break;
             }
@@ -342,6 +408,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void tick() {
         TextView feedback = (TextView)findViewById(R.id.feedback);
         EditText input = (EditText)findViewById(R.id.editText);
+        TextView chosenWord = (TextView)findViewById(R.id.chosenWord);
         Button quit = (Button)findViewById(R.id.quit);
 
         if (count < 30) {
@@ -351,10 +418,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             flag = false;
-
             hideSoftKeyboard(GameActivity.this);
             input.setText("");
             quit.setVisibility(View.INVISIBLE);
+            chosenWord.setText("");
             feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
             feedback.setText("Out of Time\nEnter your initials");
         }

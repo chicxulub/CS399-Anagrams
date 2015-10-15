@@ -70,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText"
+                android:singleLine="true"
                 android:layout_centerInParent="true"
                 android:layout_below="@+id/chosenWord"
                 android:layout_alignLeft="@+id/chosenWord"
