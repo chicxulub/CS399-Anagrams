@@ -56,15 +56,16 @@ public class SavedDataHelper extends SQLiteOpenHelper {
         db.insertOrThrow(TABLE_NAME, null, values);
         System.out.println("New entry: " + name + ", " + score);
     }
-    public List<String> all (Activity activity){
-        List<String> list = new ArrayList<String>();
+    public List<Score> all (Activity activity){
+        List<Score> list = new ArrayList<Score>();
         String[] from = {_ID, NAME, SCORE};
         String order = SCORE;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, from, null, null, null, null, order);
+        Cursor cursor = db.query(TABLE_NAME, from, null, null, null, null, order + " DESC");
         if (cursor.moveToFirst()){
             do{
-                list.add(cursor.getString(1));
+                Score score = new Score(cursor.getString(1),cursor.getInt(2));
+                list.add(score);
             }while (cursor.moveToNext());
         }
         return list;
