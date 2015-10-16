@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ScoreboardActivity extends AppCompatActivity {
     private SavedDataHelper saveData;
-    ArrayAdapter<String> arrayAdapter;
+    ScoreAdapter scoreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +26,17 @@ public class ScoreboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoreboard);
         saveData = saveData.getInstance(this);
 
-
-        List<String> all = saveData.all(this);
+        List<Score> all = saveData.all(this);
         if (all.size() > 0)
             for (int i = 0; i < all.size(); i++)
                 System.out.println(all.toArray()[i]);
         else
             System.out.println("Database is empty");
-        arrayAdapter = new ArrayAdapter<String>(ScoreboardActivity.this, R.layout.activity_scoreboard,
-                R.id.list_item_scoreboard_textview, all);
-        System.out.println(arrayAdapter.getCount());
+        scoreAdapter = new ScoreAdapter(ScoreboardActivity.this, all);
+        System.out.println(scoreAdapter.getCount());
         ListView listView = (ListView)findViewById(R.id.listview_scoreboard);
         Log.d(getClass().getSimpleName(), String.valueOf(listView));
-        listView.setAdapter(arrayAdapter);
-
+        listView.setAdapter(scoreAdapter);
+        System.out.println("finished");
     }
-/*    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        List<String> all = saveData.all(this);
-        arrayAdapter = new ArrayAdapter<String>(ScoreboardActivity.this, R.layout.list_item_scoreboard,
-                R.id.list_item_scoreboard_textview, all);
-
-        View rootView = inflater.inflate(R.layout.activity_scoreboard, container, false);
-
-        listView.setAdapter(arrayAdapter);
-    }
-*/
-
 }
