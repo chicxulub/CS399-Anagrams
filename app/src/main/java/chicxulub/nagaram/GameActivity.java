@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+    private int NUM_WORDS = 10;
     private String TAG = getClass().getSimpleName();
     private Intent mHomeIntent;
     private Intent ScoreIntent;
@@ -45,7 +46,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag = true;
     private SavedDataHelper saveData;
     private int score=0;
-    private int i = 0;
+    private int wordsIndex = 0;
 
     public int m = 0;
     public GameActivity dis = this;
@@ -103,50 +104,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         submit.setOnClickListener(this);
     }
 
-/*
-    private void generateWords(){
-        int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
-        int wordIndex, pairIndex;
-        switch (difficulty){
-            case "intermediate":
-                pairIndex = getIndex(intermediateLength, 1);
-                break;
-            case "hard":
-                pairIndex = getIndex(hardLength, 1);
-                break;
-            case "easy":
-            default:
-                pairIndex = getIndex(easyLength, 1);
-        }
-        wordIndex = getIndex(2, 1);
-
-        try {
-            word = getWord (pairIndex, wordIndex);
-            if (wordIndex == 2)
-                solution = getWord(pairIndex, 1);
-            else
-                solution = getWord(pairIndex, 2);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
     private void setWord() {
-        String pair[] = wordArray.get(i);
-        Log.d(TAG, String.valueOf(i));
-        Log.d(TAG, String.valueOf(pair[0]));
-        word = pair[0];
-        solution = pair[1];
-        i++;
+        if(wordsIndex < wordArray.size()) {
+            String pair[] = wordArray.get(wordsIndex);
+            word = pair[0];
+            solution = pair[1];
+            wordsIndex++;
+        }
     }
 
     private void generateWords() {
         int easyLength = 1820, intermediateLength = 3377, hardLength = 212;
         int wordIndex, pairIndex;
-        while (wordArray.size() < 10) {
+        while (wordArray.size() < NUM_WORDS) {
             switch (difficulty) {
                 case "intermediate":
                     pairIndex = getIndex(intermediateLength, 1);
@@ -277,36 +248,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(this.mHomeIntent);
                 break;
             case R.id.submit:
-                if (flag) {
+                if (flag && wordsIndex <= NUM_WORDS) {
                     if (checkSolution()) {
                         score = score + ((30 - count) * 100);
                         feedback.setText("Correct");
                         feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
-                        view.invalidate();
-
-                        // whether you fail or succeed, push the ram back and reset the start times
-                        long animStartTime = move.getStartTime();
-                        long elapsedTime = System.currentTimeMillis()-this.start-m*1000;
-                        if (m ==0) { m++; }
-                        Transformation t = new Transformation();
-                        move.getTransformation(animStartTime + elapsedTime, t);
-                        float values[] = new float[9];
-                        t.getMatrix().getValues(values);
-                        float x = values[2];
-                        this.img.clearAnimation();
-                        // push the animation back
-                        pushBack(x);
-                        deactivateButtons();
-                        this.start = System.currentTimeMillis();
-                        if(i<10) {
-                            ahandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    walk();
-                                    activateButtons();
-                                }
-                            }, 2000);
+                        if(wordsIndex != NUM_WORDS) {
+                            long animStartTime = move.getStartTime();
+                            long elapsedTime = System.currentTimeMillis() - this.start - m * 1000;
+                            if (m == 0) {
+                                m++;
+                            }
+                            Transformation t = new Transformation();
+                            move.getTransformation(animStartTime + elapsedTime, t);
+                            float values[] = new float[9];
+                            t.getMatrix().getValues(values);
+                            float x = values[2];
+                            this.img.clearAnimation();
+                            // push the animation back
+                            pushBack(x);
+                            deactivateButtons();
+                            this.start = System.currentTimeMillis();
+                            ahandler.postDelayed(walkThread, 2000);
                         }
+                        view.invalidate();
 
                         // restart start
                         count = 0;
@@ -316,35 +281,41 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         view.invalidate();
                     }
 
-                    setWord();
-                    text.setText(word);
-                    ((EditText) findViewById(R.id.editText)).setText("");
-                    view.invalidate();
-                    if (i == 9) { // at the last word
+                    if(wordsIndex < NUM_WORDS) {
+                        setWord();
+                        text.setText(word);
+                        ((EditText) findViewById(R.id.editText)).setText("");
+                        view.invalidate();
+                    } else {
+                        long animStartTime = move.getStartTime();
+                        long elapsedTime = System.currentTimeMillis()-this.start-m*1000;
+                        Transformation t = new Transformation();
+                        move.getTransformation(animStartTime + elapsedTime, t);
+                        float values[] = new float[9];
+                        t.getMatrix().getValues(values);
+                        float x = values[2];
+                        this.img.clearAnimation();
+                        // push the animation back
+                        pushBack(x);
+
+                        handler.removeCallbacks(counterThread);
+
+                        ((EditText) findViewById(R.id.editText)).setText("");
+                        feedback.setText("Finished");
+                        text.setText("Enter your name");
                         flag = false;
                     }
+
                 }
                 else {
                     EditText userInput = (EditText) findViewById(R.id.editText);
-                    if (i == 9) {
-                        userInput.setText("");
-                        Button quit = (Button)findViewById(R.id.quit);
-                        quit.setVisibility(View.INVISIBLE);
-                        TextView chosenWord = (TextView)findViewById(R.id.chosenWord);
-                        chosenWord.setText("");
-                        feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
-                        feedback.setText("Challenge Finished\nEnter your initials");
-                        activateButtons();
-                    }
-                    else {
-                        userInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
-                        if ("".equals(userInput.getText().toString()))
-                            saveData.truncate();
-                        else
-                            saveData.insert(userInput.getText().toString(), score);
-                        startActivity(this.ScoreIntent);
-                    }
+                    if ("".equals(userInput.getText().toString()))
+                        saveData.truncate();
+                    else
+                        saveData.insert(userInput.getText().toString(), score);
+                    startActivity(this.ScoreIntent);
                 }
+
                 break;
             }
     }
@@ -372,6 +343,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    private Runnable walkThread = new Runnable() {
+        @Override
+        public void run() {
+            walk();
+            activateButtons();
+        }
+    };
 
     public void pushBack(float x) {
         DisplayMetrics dm = new DisplayMetrics();
@@ -421,9 +399,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             hideSoftKeyboard(GameActivity.this);
             input.setText("");
             quit.setVisibility(View.INVISIBLE);
-            chosenWord.setText("");
+            chosenWord.setText("Enter your name");
             feedback.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
-            feedback.setText("Out of Time\nEnter your initials");
+            activateButtons();
+            feedback.setText("Out of Time");
+
         }
     }
 }
