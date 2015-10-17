@@ -3,8 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="chicxulub.nagaram.ScoreboardActivity">
+    <TextView
+        android:id="@+id/scoreboard_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:padding="16dp"
+        android:background="@color/black"
+        android:text="NAG-A-RAM High Scores"
+        android:textAppearance="@android:style/TextAppearance.Large"/>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <ListView
+        android:layout_below="@id/scoreboard_title"
         android:id="@+id/listview_scoreboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
