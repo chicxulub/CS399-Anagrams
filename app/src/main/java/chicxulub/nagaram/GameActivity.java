@@ -309,7 +309,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else {
                     EditText userInput = (EditText) findViewById(R.id.editText);
-                    if ("".equals(userInput.getText().toString()))
+                    if ("delete".equals(userInput.getText().toString()))
                         saveData.truncate();
                     else
                         saveData.insert(userInput.getText().toString(), score);
